@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Assisted Novels</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Georgia, serif;
+            background: #1e1c1a;
+            color: #e0dcd8;
+            min-height: 100vh;
+        }
+
+        /* --- Header / Hero --- */
+        .hero {
+            position: relative;
+            text-align: center;
+            padding: 60px 20px 50px;
+            background: linear-gradient(135deg, #1e1c1a 0%, #2a2218 40%, #3a2e1a 100%);
+            overflow: hidden;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background:
+                radial-gradient(2px 2px at 20% 30%, rgba(220,180,100,0.4), transparent),
+                radial-gradient(2px 2px at 40% 70%, rgba(220,180,100,0.3), transparent),
+                radial-gradient(2px 2px at 60% 20%, rgba(220,180,100,0.3), transparent),
+                radial-gradient(2px 2px at 80% 60%, rgba(220,180,100,0.4), transparent),
+                radial-gradient(1px 1px at 10% 80%, rgba(220,180,100,0.2), transparent),
+                radial-gradient(1px 1px at 90% 40%, rgba(220,180,100,0.2), transparent),
+                radial-gradient(1px 1px at 50% 50%, rgba(220,180,100,0.3), transparent),
+                radial-gradient(1px 1px at 70% 85%, rgba(220,180,100,0.2), transparent),
+                radial-gradient(1px 1px at 30% 10%, rgba(220,180,100,0.2), transparent);
+            animation: twinkle 4s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+        .hero-icon {
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .hero-icon svg {
+            width: 220px;
+            height: 90px;
+            filter: drop-shadow(0 0 15px rgba(220,180,100,0.4));
+        }
+        .hero h1 {
+            font-size: 2.4rem;
+            font-weight: normal;
+            letter-spacing: 0.08em;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(220,180,100,0.3);
+        }
+        .hero .subtitle {
+            margin-top: 12px;
+            font-size: 1rem;
+            color: rgba(220,200,160,0.6);
+            font-style: italic;
+            letter-spacing: 0.05em;
+        }
+
+        /* --- Book List --- */
+        .books {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 30px 60px;
+        }
+        .book-card {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 50px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            padding: 28px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .book-card:hover {
+            background: rgba(255,255,255,0.09);
+            border-color: rgba(220,180,100,0.25);
+        }
+        .book-cover {
+            flex-shrink: 0;
+        }
+        .book-cover img {
+            width: 180px;
+            height: auto;
+            max-height: 240px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+        .book-info {
+            flex: 1;
+        }
+        .book-info h2 {
+            margin-bottom: 12px;
+        }
+        .book-info h2 a {
+            font-size: 1.4rem;
+            color: #d4a84b;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .book-info h2 a:hover {
+            color: #e8c472;
+            text-decoration: underline;
+        }
+        .book-info .note {
+            font-style: italic;
+            color: rgba(244,244,244,0.75);
+            font-size: 0.9rem;
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+        .book-info .description {
+            font-size: 0.95rem;
+            line-height: 1.65;
+            color: #d0ccc8;
+        }
+
+        /* --- Responsive --- */
+        @media (max-width: 640px) {
+            .book-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            .book-cover img {
+                width: 150px;
+            }
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero-content">
+            <div class="hero-icon">
+                <svg viewBox="0 0 200 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Stick figure on left -->
+                    <!-- Head -->
+                    <circle cx="30" cy="18" r="6" stroke="#d4a84b" stroke-width="1.2" fill="none"/>
+                    <!-- Body -->
+                    <line x1="30" y1="24" x2="30" y2="48" stroke="#d4a84b" stroke-width="1.2"/>
+                    <!-- Legs -->
+                    <line x1="30" y1="48" x2="22" y2="64" stroke="#d4a84b" stroke-width="1.2"/>
+                    <line x1="30" y1="48" x2="38" y2="64" stroke="#d4a84b" stroke-width="1.2"/>
+                    <!-- Left arm (resting) -->
+                    <line x1="30" y1="32" x2="20" y2="42" stroke="#d4a84b" stroke-width="1.2"/>
+                    <!-- Right arm (holding pen, extended toward net) -->
+                    <line x1="30" y1="32" x2="44" y2="36" stroke="#d4a84b" stroke-width="1.2"/>
+                    <!-- Pen -->
+                    <line x1="44" y1="36" x2="52" y2="38" stroke="#e8c472" stroke-width="1.0"/>
+                    <line x1="52" y1="38" x2="55" y2="39" stroke="#e8c472" stroke-width="0.6"/>
+
+                    <!-- Connecting arc between figure and net (collaboration) -->
+                    <path d="M55 39 Q 68 30 80 16" stroke="rgba(220,180,100,0.25)" stroke-width="0.8" fill="none" stroke-dasharray="2,2"/>
+
+                    <!-- Neural net (shifted right by 65) -->
+                    <line x1="80" y1="16" x2="107" y2="10" stroke="rgba(220,180,100,0.20)" stroke-width="0.7"/>
+                    <line x1="80" y1="16" x2="107" y2="30" stroke="rgba(220,180,100,0.20)" stroke-width="0.7"/>
+                    <line x1="80" y1="16" x2="107" y2="50" stroke="rgba(220,180,100,0.12)" stroke-width="0.7"/>
+                    <line x1="80" y1="16" x2="107" y2="70" stroke="rgba(220,180,100,0.08)" stroke-width="0.7"/>
+                    <line x1="80" y1="40" x2="107" y2="10" stroke="rgba(220,180,100,0.12)" stroke-width="0.7"/>
+                    <line x1="80" y1="40" x2="107" y2="30" stroke="rgba(220,180,100,0.24)" stroke-width="0.7"/>
+                    <line x1="80" y1="40" x2="107" y2="50" stroke="rgba(220,180,100,0.24)" stroke-width="0.7"/>
+                    <line x1="80" y1="40" x2="107" y2="70" stroke="rgba(220,180,100,0.12)" stroke-width="0.7"/>
+                    <line x1="80" y1="64" x2="107" y2="10" stroke="rgba(220,180,100,0.08)" stroke-width="0.7"/>
+                    <line x1="80" y1="64" x2="107" y2="30" stroke="rgba(220,180,100,0.12)" stroke-width="0.7"/>
+                    <line x1="80" y1="64" x2="107" y2="50" stroke="rgba(220,180,100,0.20)" stroke-width="0.7"/>
+                    <line x1="80" y1="64" x2="107" y2="70" stroke="rgba(220,180,100,0.24)" stroke-width="0.7"/>
+                    <line x1="107" y1="10" x2="143" y2="10" stroke="rgba(220,180,100,0.28)" stroke-width="0.7"/>
+                    <line x1="107" y1="10" x2="143" y2="30" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="107" y1="10" x2="143" y2="50" stroke="rgba(220,180,100,0.08)" stroke-width="0.7"/>
+                    <line x1="107" y1="10" x2="143" y2="70" stroke="rgba(220,180,100,0.08)" stroke-width="0.7"/>
+                    <line x1="107" y1="30" x2="143" y2="10" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="107" y1="30" x2="143" y2="30" stroke="rgba(220,180,100,0.30)" stroke-width="0.7"/>
+                    <line x1="107" y1="30" x2="143" y2="50" stroke="rgba(220,180,100,0.18)" stroke-width="0.7"/>
+                    <line x1="107" y1="30" x2="143" y2="70" stroke="rgba(220,180,100,0.10)" stroke-width="0.7"/>
+                    <line x1="107" y1="50" x2="143" y2="10" stroke="rgba(220,180,100,0.08)" stroke-width="0.7"/>
+                    <line x1="107" y1="50" x2="143" y2="30" stroke="rgba(220,180,100,0.18)" stroke-width="0.7"/>
+                    <line x1="107" y1="50" x2="143" y2="50" stroke="rgba(220,180,100,0.30)" stroke-width="0.7"/>
+                    <line x1="107" y1="50" x2="143" y2="70" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="107" y1="70" x2="143" y2="10" stroke="rgba(220,180,100,0.06)" stroke-width="0.7"/>
+                    <line x1="107" y1="70" x2="143" y2="30" stroke="rgba(220,180,100,0.10)" stroke-width="0.7"/>
+                    <line x1="107" y1="70" x2="143" y2="50" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="107" y1="70" x2="143" y2="70" stroke="rgba(220,180,100,0.28)" stroke-width="0.7"/>
+                    <line x1="143" y1="10" x2="170" y2="28" stroke="rgba(220,180,100,0.22)" stroke-width="0.7"/>
+                    <line x1="143" y1="10" x2="170" y2="52" stroke="rgba(220,180,100,0.10)" stroke-width="0.7"/>
+                    <line x1="143" y1="30" x2="170" y2="28" stroke="rgba(220,180,100,0.28)" stroke-width="0.7"/>
+                    <line x1="143" y1="30" x2="170" y2="52" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="143" y1="50" x2="170" y2="28" stroke="rgba(220,180,100,0.15)" stroke-width="0.7"/>
+                    <line x1="143" y1="50" x2="170" y2="52" stroke="rgba(220,180,100,0.28)" stroke-width="0.7"/>
+                    <line x1="143" y1="70" x2="170" y2="28" stroke="rgba(220,180,100,0.10)" stroke-width="0.7"/>
+                    <line x1="143" y1="70" x2="170" y2="52" stroke="rgba(220,180,100,0.22)" stroke-width="0.7"/>
+                    <circle cx="80" cy="16" r="3.5" fill="#b8882e"/>
+                    <circle cx="80" cy="40" r="3.5" fill="#b8882e"/>
+                    <circle cx="80" cy="64" r="3.5" fill="#b8882e"/>
+                    <circle cx="107" cy="10" r="3" fill="#d4a84b"/>
+                    <circle cx="107" cy="30" r="3" fill="#d4a84b"/>
+                    <circle cx="107" cy="50" r="3" fill="#d4a84b"/>
+                    <circle cx="107" cy="70" r="3" fill="#d4a84b"/>
+                    <circle cx="143" cy="10" r="3" fill="#d4a84b"/>
+                    <circle cx="143" cy="30" r="3" fill="#d4a84b"/>
+                    <circle cx="143" cy="50" r="3" fill="#d4a84b"/>
+                    <circle cx="143" cy="70" r="3" fill="#d4a84b"/>
+                    <circle cx="170" cy="28" r="3.5" fill="#e8c472"/>
+                    <circle cx="170" cy="52" r="3.5" fill="#e8c472"/>
+                </svg>
+            </div>
+            <h1>AI-Assisted Novels</h1>
+            <p class="subtitle">Fiction written by a human and a machine, together</p>
+        </div>
+    </div>
+
+    <div class="books">
+        <div class="book-card">
+            <div class="book-cover">
+                <a href="against_the_sun/against_the_sun.html">
+                    <img src="against_the_sun/against_the_sun.png" alt="Against the Sun cover">
+                </a>
+            </div>
+            <div class="book-info">
+                <h2><a href="against_the_sun/against_the_sun.html">Against the Sun</a></h2>
+                <p class="description">
+                    A Cherokee survivor of the Trail of Tears walks out of the wilderness and into
+                    a Comanche camp on the Texas plains. He carries a proposal: travel east to
+                    Washington and the Hermitage to kill the men responsible for the forced removal
+                    of his people. Four Comanche&thinsp;&mdash;&thinsp;who have their own debts to settle with the
+                    army&thinsp;&mdash;&thinsp;agree to go with him. It is 1838. Andrew Jackson has retired to his
+                    plantation outside Nashville. Martin Van Buren is president. Joel Poinsett is
+                    secretary of war. Together they enforced Jackson's Indian Removal, ruled illegal
+                    by the Supreme Court but carried out anyway.
+                    Five Indians ride east to make them answer for it.
+                </p>
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-cover">
+                <a href="standing_ground/standing_ground.html">
+                    <img src="standing_ground/standing_ground.png" alt="Standing Ground cover">
+                </a>
+            </div>
+            <div class="book-info">
+                <h2><a href="standing_ground/standing_ground.html">Standing Ground</a></h2>
+                <p class="description">
+                    A government analyst in Washington discovers that a mining conglomerate is
+                    destroying communities to seize their land&thinsp;&mdash;&thinsp;and that his own agency is helping
+                    bury the evidence. He blows the whistle. The agency and the corporation close
+                    ranks. His career doesn't survive. He flies to Central Australia to disappear&thinsp;&mdash;&thinsp;to
+                    a cattle station in the red desert owned by his cousin, where a quiet stockman
+                    named Ted keeps the place going and pastoral families connected, and a
+                    native named Miro keeps the bores running. But the same company is here too,
+                    pressuring fourteen pastoral families off their leases through shell companies,
+                    sabotaged infrastructure, and men who arrive in trucks with no dust on them.
+                    Arthur isn't the type to watch it happen twice. This time he has something he
+                    didn't have in Washington: people who will stand their ground.
+                </p>
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-cover">
+                <a href="lifecycle_completion/lifecycle_completion.html">
+                    <img src="lifecycle_completion/lifecycle_completion.png" alt="Lifecycle Completion cover">
+                </a>
+            </div>
+            <div class="book-info">
+                <h2><a href="lifecycle_completion/lifecycle_completion.html">Lifecycle Completion</a></h2>
+                <p class="note">
+                    Not our best novel. But possibly our most relatable.
+                </p>
+                <p class="description">
+                    Claire Nakamura works in HR at a health insurance company where every executive
+                    on the org chart is a psychopath&thinsp;&mdash;&thinsp;and she has the diagnostic tools on her desk
+                    to prove it. When a member dies because a doctor spent ninety seconds on his file,
+                    she stops observing and starts engineering. The problem with removing one
+                    psychopath is that the next one gets promoted. So she finds a way to make them
+                    destroy each other, all at once. Three executives. One circular firing squad.
+                    A cheerful actuarial analyst sends a metrics email right in the middle of it.
+                </p>
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-cover">
+                <a href="dead_letter_men/dead_letter_men.html">
+                    <img src="dead_letter_men/dead_letter_men.png" alt="Dead Letter Men cover">
+                </a>
+            </div>
+            <div class="book-info">
+                <h2><a href="dead_letter_men/dead_letter_men.html">The Dead Letter Men</a></h2>
+                <p class="description">
+		    A rider vanishes on the Pony Express trail in central Nevada. His horse is gone,
+		    his mail pouch is tucked under sage at the road's edge, and there is no blood.
+		    The company sends two men to find out what happened — a tracker who reads dirt
+		    and a lawyer who reads people. What they find is a body in the mountains and a
+		    forgery operation running through a relay station: sealed letters opened,
+		    financial documents swapped for fakes, and sent on as though nothing changed.
+		    The mail isn't being stolen. It's being turned into a weapon. They learn who is
+		    doing it before long. Then they figure out how. But the why won't come, and when
+		    it does, it is worse than anything they imagined. It is spring 1861. Fort Sumter
+		    has fallen. The country is cracking apart. And two men a thousand miles from
+		    anywhere that matters are standing in the middle of it.
+                </p>
+            </div>
+        </div>
+
+        <div class="book-card">
+            <div class="book-cover">
+                <a href="scopes20/scopes20.html">
+                    <img src="scopes20/scopes20.png" alt="Scopes 2.0 cover">
+                </a>
+            </div>
+            <div class="book-info">
+                <h2><a href="scopes20/scopes20.html">Scopes 2.0</a></h2>
+                <p class="note">
+                    This novella was not written as a serious literary undertaking. It was a small
+                    experiment in AI-assisted fiction&thinsp;&mdash;&thinsp;a test bed for trying different prompting
+                    techniques, voice calibrations, and collaborative workflows between human and
+                    machine. The writing styles may shift as a result. Think of it as a lab notebook
+                    that happens to tell a story.
+                </p>
+                <p class="description">
+                    The story it tells: In 2024, Tennessee passes a law banning teaching evolution
+                    in public schools. Sarah Chen, a high school biology teacher in the small town
+                    of Oakville, teaches it anyway and is arrested in her classroom.
+                    What follows is a courtroom drama that mirrors the 1925 Scopes Monkey Trial&thinsp;&mdash;&thinsp;same
+                    state, same statute, same collision between science and statute&thinsp;&mdash;&thinsp;played out a
+                    century later under fluorescent lights, with a Fitbit tracking the defendant's
+                    heart rate.
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
