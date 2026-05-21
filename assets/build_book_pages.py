@@ -8,6 +8,10 @@ import pathlib
 
 ROOT = pathlib.Path("/Users/rbutler/GitHub/ai-assisted-novels")
 SITE = "https://ralphbutler.github.io/ai-assisted-novels"
+# Cloudflare Worker that proxies PDF/EPUB downloads and counts each one in KV.
+# PDFs are returned inline; EPUBs as attachments. The PNG cover link bypasses this
+# and points straight at GitHub Pages so cover-thumbnail clicks aren't counted.
+WORKER = "https://ai-assisted-novel-downloads.rmbgm1.workers.dev"
 
 # Em-dash flanked by hair-spaces (matches the homepage typography).
 M = "&thinsp;&mdash;&thinsp;"
@@ -143,6 +147,19 @@ BOOKS = {
         ),
         "meta_desc": "In 2024 Tennessee bans teaching evolution. A biology teacher refuses, and her trial becomes a modern echo of the 1925 Scopes Monkey Trial.",
         "genres": ["Legal Drama"],
+    },
+    "juror_nine": {
+        "title_html":  "Juror Nine",
+        "title_plain": "Juror Nine",
+        "note":        "This short novel is an attempt to match the style of Elmore Leonard in a fun story about a hitman that ends up on the jury for his target.",
+        "teaser": (
+            "Dan Mercer teaches history at a Nashville university and quietly works as a hitman on the side. "
+            f"When a local contract lands on his desk, the target gets arrested for murder before Dan can act{M}"
+            f"and then Dan is summoned for jury duty on the same trial. He{RQ}s seated as Juror Nine. "
+            f"His target is at the defendant{RQ}s table."
+        ),
+        "meta_desc": "A Nashville history professor moonlighting as a hitman ends up on the jury for the man he was hired to kill. An AI-assisted novel by Ralph M. Butler, modeled on Elmore Leonard.",
+        "genres": ["Crime Fiction"],
     },
 }
 
@@ -304,7 +321,7 @@ TEMPLATE = """\
         </div>
         <div class="book-meta">
             <h1>{title_html}</h1>
-            <p class="byline">A novel by Ralph M. Butler</p>
+            <p class="byline">A novel by Ralph M. Butler and Claude Opus</p>
 {note_block}            <p class="description">
                 {teaser}
             </p>
@@ -317,11 +334,11 @@ TEMPLATE = """\
     </p>
     <ul>
         <li>
-            <a href="{slug}.pdf">{slug}.pdf</a>
+            <a href="{worker}/{slug}/{slug}.pdf">{slug}.pdf</a>
             <span class="file-info">PDF Document</span>
         </li>
         <li>
-            <a href="{slug}.epub" download="{slug}.epub">{slug}.epub</a>
+            <a href="{worker}/{slug}/{slug}.epub" download="{slug}.epub">{slug}.epub</a>
             <span class="file-info">eBook (EPUB)</span>
         </li>
         <li>
@@ -366,6 +383,7 @@ def render(slug, b):
         json_ld=json_ld,
         teaser=b["teaser"],
         note_block=note_block,
+        worker=WORKER,
     )
 
 
