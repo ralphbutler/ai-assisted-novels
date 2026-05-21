@@ -38,6 +38,15 @@
         a:hover {
             text-decoration: underline;
         }
+        .notice {
+            background: #fff8e1;
+            border-left: 4px solid #d4a84b;
+            padding: 14px 18px;
+            font-size: 1.1em;
+            color: #5a4a1a;
+            margin: 20px 0 28px;
+            border-radius: 4px;
+        }
         .file-info {
             font-size: 0.9em;
             color: #666;
@@ -46,10 +55,12 @@
 </head>
 <body>
     <h1>Available Files</h1>
-    <p>Click a link to view or right-click and select "Save Link As..." to download.</p>
+    <p class="notice">
+        <strong>PDFs</strong> open in your browser when clicked. <strong>EPUB</strong> and <strong>image</strong> files download automatically. Right-click any link and choose &ldquo;Save Link As&hellip;&rdquo; to save.
+    </p>
     <ul>
         <li>
-	    <a href="dead_letter_men.pdf" download="dead_letter_men.pdf">dead_letter_men.pdf</a>
+	    <a href="dead_letter_men.pdf">dead_letter_men.pdf</a>
             <span class="file-info">PDF Document</span>
         </li>
         <li>
