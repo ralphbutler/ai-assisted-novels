@@ -161,6 +161,29 @@ BOOKS = {
         "meta_desc": "A Nashville history professor moonlighting as a hitman ends up on the jury for the man he was hired to kill. An AI-assisted novel by Ralph M. Butler, modeled on Elmore Leonard.",
         "genres": ["Crime Fiction"],
     },
+    "uncatalogued_book": {
+        "title_html":  "The Uncatalogued Book",
+        "title_plain": "The Uncatalogued Book",
+        "note": (
+            "Perhaps our most difficult-to-read book thus far. Every paragraph tries to meet two "
+            "goals at once:"
+            "<ol>"
+            "<li>sound as if spoken by a tradesman in rare manuscripts living in 1620;</li>"
+            "<li>keep its meaning easily discernible to someone living in 2020.</li>"
+            "</ol>"
+        ),
+        "teaser": (
+            f"Niccolò, a book trader in his eighties, is passing what he knows to his young apprentice. "
+            f"Long ago he learned the trade{RQ}s hard secret: the most valuable books are the banned "
+            f"ones, because power fears the truth, and the truth is most often written by those it has "
+            f"labeled heretics. For sixty years he is sent wherever books break loose{M}failing "
+            f"monasteries, plague estates, collapsing courts{M}until, in 1659 Mughal Delhi, he makes "
+            "the purchase of his life out of the wreckage of an execution, and can never enter it in "
+            "any catalogue."
+        ),
+        "meta_desc": "An eighty-year-old manuscript trader recounts sixty years buying banned books across the seventeenth century — Venice, Constantinople, Isfahan, Mughal Delhi — and the one purchase he could never enter in any catalogue. A literary historical novel by Ralph M. Butler.",
+        "genres": ["Historical Fiction"],
+    },
 }
 
 
@@ -257,6 +280,16 @@ TEMPLATE = """\
             color: #4a3d20;
             margin: 0 0 18px;
             font-style: italic;
+        }}
+        .author-note ol {{
+            margin: 8px 0 0;
+            padding-left: 22px;
+        }}
+        .author-note li {{
+            margin: 4px 0;
+            padding: 0;
+            background: none;
+            display: list-item;
         }}
         .description {{
             margin: 0;
@@ -371,7 +404,7 @@ def render(slug, b):
 
     note_block = ""
     if b["note"]:
-        note_block = f'            <p class="author-note">\n                {b["note"]}\n            </p>\n'
+        note_block = f'            <div class="author-note">\n                {b["note"]}\n            </div>\n'
 
     return TEMPLATE.format(
         slug=slug,
