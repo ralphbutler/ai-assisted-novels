@@ -106,7 +106,10 @@ BOOKS = {
     "against_the_sun": {
         "title_html":  "Against the Sun",
         "title_plain": "Against the Sun",
-        "note": None,
+        "note": (
+            f"I have a tiny thread of Cherokee ancestry{M}too little to claim anything by, "
+            "but enough to pull me toward this story."
+        ),
         "teaser": (
             "A Cherokee survivor of the Trail of Tears walks out of the wilderness and into a Comanche "
             "camp on the Texas plains. He carries a proposal: travel east to Washington and the Hermitage "
@@ -183,6 +186,7 @@ BOOKS = {
         ),
         "meta_desc": "An eighty-year-old manuscript trader recounts sixty years buying banned books across the seventeenth century — Venice, Constantinople, Isfahan, Mughal Delhi — and the one purchase he could never enter in any catalogue. A literary historical novel by Ralph M. Butler.",
         "genres": ["Historical Fiction"],
+        "extra_files": [("COMPANION_GUIDE.pdf", "PDF Document")],
     },
 }
 
@@ -378,7 +382,7 @@ TEMPLATE = """\
             <a href="{slug}.png" download="{slug}.png">{slug}.png</a>
             <span class="file-info">Image</span>
         </li>
-    </ul>
+{extra_files}    </ul>
 </body>
 </html>
 """
@@ -406,6 +410,17 @@ def render(slug, b):
     if b["note"]:
         note_block = f'            <div class="author-note">\n                {b["note"]}\n            </div>\n'
 
+    # Optional extra downloads living directly in the book's own dir (not the
+    # Worker-proxied pdf/epub). Each entry is (filename, file-info label).
+    extra_files = ""
+    for fname, info in b.get("extra_files", []):
+        extra_files += (
+            f'        <li>\n'
+            f'            <a href="{fname}" download="{fname}">{fname}</a>\n'
+            f'            <span class="file-info">{info}</span>\n'
+            f'        </li>\n'
+        )
+
     return TEMPLATE.format(
         slug=slug,
         title_html=b["title_html"],
@@ -416,6 +431,7 @@ def render(slug, b):
         json_ld=json_ld,
         teaser=b["teaser"],
         note_block=note_block,
+        extra_files=extra_files,
         worker=WORKER,
     )
 
