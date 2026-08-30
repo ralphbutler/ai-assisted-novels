@@ -32,6 +32,29 @@ BOOKS = {
         "meta_desc": "An HR analyst engineers a circular firing squad of psychopath executives at a health insurance company. A dark comedy of corporate revenge by Ralph M. Butler.",
         "genres": ["Dark Comedy", "Corporate Satire"],
     },
+    "excess_heat": {
+        "title_html":  "Excess Heat",
+        "title_plain": "Excess Heat",
+        "cover_ext":   "jpg",
+        "note": (
+            "We often use AI to help us reason about research problems in science, so it was natural "
+            f"to want our new book to be about some goofy topic combining the two. Inspired by Umberto "
+            f"Eco{RQ}s {LQ}Foucault{RQ}s Pendulum,{RQ} where characters invent a grand conspiracy theory "
+            "connecting the Knights Templar to global domination, we decided to have some of our "
+            f"characters expect that AI can help them discover the secrets of cold fusion. A warning: "
+            "while this book is mostly about the fun of watching folks bend experimental data and AI "
+            "comments to fit their world view, it is not without a bit of tragedy as well."
+        ),
+        "teaser": (
+            "Three university professors get mundane results from an experiment using heavy water, "
+            f"palladium, and a bath that holds its temperature. On a Friday afternoon they ask the "
+            f"lab{RQ}s AI, Sage, a joke question about cold fusion. It answers simply: No. And then, "
+            f"because the equipment really is dangerous, it tells them please do not seal the cell. "
+            "One of them screenshots the funny part and posts it."
+        ),
+        "meta_desc": "Three professors ask their lab AI a joke question about cold fusion. It says no, and warns them not to seal the cell. The screenshot escapes, a bar story rounds two hundred milliwatts up to two hundred watts, and a laid-off electroplater decides a warning is what people put in front of something they are hiding.",
+        "genres": ["Literary Fiction", "Dark Comedy"],
+    },
     "case_borrowed_alibi": {
         "title_html":  "The Case of the Borrowed Alibi",
         "title_plain": "The Case of the Borrowed Alibi",
@@ -354,11 +377,11 @@ TEMPLATE = """\
 
     <div class="book-header">
         <div class="book-cover">
-            <img src="{slug}.png" alt="{title_plain} book cover">
+            <img src="{cover}" alt="{title_plain} book cover">
         </div>
         <div class="book-meta">
             <h1>{title_html}</h1>
-            <p class="byline">A novel by Ralph M. Butler and Claude Opus</p>
+            <p class="byline">A novel by Ralph M. Butler and Opus</p>
 {note_block}            <p class="description">
                 {teaser}
             </p>
@@ -379,7 +402,7 @@ TEMPLATE = """\
             <span class="file-info">eBook (EPUB)</span>
         </li>
         <li>
-            <a href="{slug}.png" download="{slug}.png">{slug}.png</a>
+            <a href="{cover}" download="{cover}">{cover}</a>
             <span class="file-info">Image</span>
         </li>
 {extra_files}    </ul>
@@ -390,7 +413,9 @@ TEMPLATE = """\
 
 def render(slug, b):
     canonical = f"{SITE}/{slug}/{slug}.html"
-    image_url = f"{SITE}/{slug}/{slug}.png"
+    # Covers are .png except where a JPEG keeps the file usefully smaller.
+    cover = f"{slug}.{b.get('cover_ext', 'png')}"
+    image_url = f"{SITE}/{slug}/{cover}"
 
     json_ld = json.dumps({
         "@context": "https://schema.org",
@@ -423,6 +448,7 @@ def render(slug, b):
 
     return TEMPLATE.format(
         slug=slug,
+        cover=cover,
         title_html=b["title_html"],
         title_plain=b["title_plain"],
         meta_desc=b["meta_desc"],
