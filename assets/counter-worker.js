@@ -63,8 +63,12 @@ export default {
       return new Response("Not found.", { status: 404 });
     }
 
+    // proxy from GitHub Pages
+    const upstream = await fetch(ORIGIN + path);
+
     // increment counter without blocking the response
-    if (shouldCount(request)) {
+    // (only for real hits -- a 404 from upstream must not inflate a count)
+    if (upstream.ok && shouldCount(request)) {
       ctx.waitUntil((async () => {
         try {
           const n = parseInt(await env.COUNTS.get(path)) || 0;
@@ -73,8 +77,6 @@ export default {
       })());
     }
 
-    // proxy from GitHub Pages
-    const upstream = await fetch(ORIGIN + path);
     const headers = new Headers(upstream.headers);
 
     // PDFs open inline; EPUB and PNG force download
